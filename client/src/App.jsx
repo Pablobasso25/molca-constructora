@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import Lenis from '@studio-freight/lenis'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar'
 import Footer from './components/footer/Footer'
@@ -12,6 +14,23 @@ import AdminLogin from './pages/AdminLogin'
 import ProtectedRoute from './components/ui/ProtectedRoute'
 
 export const App = () => {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const lenis = new Lenis({ lerp: 0.09, smoothWheel: true })
+    window.__lenis = lenis 
+    let raf
+    const loop = (time) => {
+      lenis.raf(time)
+      raf = requestAnimationFrame(loop)
+    }
+    raf = requestAnimationFrame(loop)
+    return () => {
+      cancelAnimationFrame(raf)
+      lenis.destroy()
+      delete window.__lenis
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <div className="min-h-screen flex flex-col">
