@@ -2,10 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+.intro-fade {
+  transition: opacity 0.8s ease 0.2s;
+}
+html[data-intro='playing'] .intro-fade {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
   body {
     @apply bg-molca-light text-gray-900 font-sans antialiased;
     overflow-x: hidden;
