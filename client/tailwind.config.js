@@ -17,12 +17,18 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
+        display: ['Montserrat', 'Inter', 'sans-serif'],
       },
       animation: {
+        'scroll-line': 'scrollLine 2s ease-in-out infinite',
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.5s ease-out',
       },
       keyframes: {
+        scrollLine: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(200%)' },
+        },
         fadeIn: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
