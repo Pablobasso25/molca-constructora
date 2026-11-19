@@ -51,20 +51,20 @@ export const ProyectoDetalle = () => {
                 src={project.imagen || 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80'}
                 alt={project.titulo}
                 className="w-full h-full object-cover"
-                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80' }}
+                onError={(event) => { event.target.src = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=800&q=80' }}
               />
               <span className="absolute top-4 left-4 bg-white/90 backdrop-blur text-molca-dark px-3 py-1 rounded font-semibold text-sm">
                 {project.estado}
               </span>
             </div>
             <div className="flex gap-4 overflow-x-auto pb-4">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200">
+              {[1, 2, 3].map((imageNumber) => (
+                <div key={imageNumber} className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200">
                   <img
-                    src={`https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=200&q=80&sig=${i}`}
-                    alt={`Imagen ${i}`}
+                    src={`https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=200&q=80&sig=${imageNumber}`}
+                    alt={`Imagen ${imageNumber}`}
                     className="w-full h-full object-cover"
-                    onError={(e) => { e.target.style.display = 'none' }}
+                    onError={(event) => { event.target.style.display = 'none' }}
                   />
                 </div>
               ))}

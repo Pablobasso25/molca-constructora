@@ -8,8 +8,8 @@ export const AdminLogin = () => {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleLogin = async (e) => {
-    e.preventDefault()
+  const handleLogin = async (event) => {
+    event.preventDefault()
     setLoading(true)
     setError('')
     try {
@@ -43,7 +43,7 @@ export const AdminLogin = () => {
               type="text"
               name="usuario"
               value={credentials.usuario}
-              onChange={(e) => setCredentials({ ...credentials, usuario: e.target.value })}
+              onChange={(event) => setCredentials({ ...credentials, usuario: event.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-molca-primary focus:border-molca-primary outline-none"
               required
             />
@@ -54,7 +54,7 @@ export const AdminLogin = () => {
               type="password"
               name="clave"
               value={credentials.clave}
-              onChange={(e) => setCredentials({ ...credentials, clave: e.target.value })}
+              onChange={(event) => setCredentials({ ...credentials, clave: event.target.value })}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-molca-primary focus:border-molca-primary outline-none"
               required
             />

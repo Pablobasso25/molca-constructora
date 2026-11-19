@@ -13,12 +13,12 @@ export const Contacto = () => {
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+  const handleChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value })
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  const handleSubmit = async (event) => {
+    event.preventDefault()
     setSending(true)
     try {
       await leadService.create(formData)
@@ -71,8 +71,8 @@ export const Contacto = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           <div className="lg:col-span-4 space-y-6">
             <h3 className="text-xl font-bold text-molca-dark">Información de Contacto</h3>
-            {contactoInfo.map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
+            {contactoInfo.map((item, itemIndex) => (
+              <div key={itemIndex} className="flex items-start gap-3">
                 <div className="w-10 h-10 bg-molca-primary/10 rounded-lg flex items-center justify-center text-molca-primary flex-shrink-0">
                   {item.icon}
                 </div>

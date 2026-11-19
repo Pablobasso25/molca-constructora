@@ -48,7 +48,7 @@ export const Desarrollos = () => {
                   src={emp.imagen}
                   alt={emp.titulo}
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1560184897-6187b9a94050?auto=format&fit=crop&w=600&q=80' }}
+                  onError={(event) => { event.target.src = 'https://images.unsplash.com/photo-1560184897-6187b9a94050?auto=format&fit=crop&w=600&q=80' }}
                 />
                 <div className="absolute top-4 right-4 bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">
                   {emp.estado}

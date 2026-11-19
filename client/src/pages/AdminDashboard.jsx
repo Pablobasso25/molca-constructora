@@ -51,8 +51,8 @@ export const AdminDashboard = () => {
       </nav>
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {statCards.map((card, i) => (
-            <div key={i} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+          {statCards.map((card, cardIndex) => (
+            <div key={cardIndex} className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">{card.label}</p>
