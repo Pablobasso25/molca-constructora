@@ -144,7 +144,7 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
             <span className="mb-4 text-[11px] font-medium tracking-[0.3em] text-white/90 [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
               {d.num}
             </span>
-            <h2 className="font-display text-[1.05rem] font-normal uppercase tracking-[0.08em] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)] sm:text-4xl md:text-6xl lg:text-7xl">
+            <h2 className="font-display text-[3.6vw] font-normal uppercase tracking-[0.08em] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
               {d.label}
             </h2>
             <p className="mt-4 hidden max-w-[16rem] text-[11px] font-medium uppercase tracking-[0.2em] text-white/90 [text-shadow:0_1px_12px_rgba(0,0,0,0.6)] sm:block">
