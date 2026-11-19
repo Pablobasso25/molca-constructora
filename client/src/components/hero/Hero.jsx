@@ -29,7 +29,6 @@ const unlockScroll = () => {
 
 const sections = {
   left: {
-    num: '01',
     label: 'Constructora',
     kicker: 'Obra civil y ejecución técnica',
     to: '/constructora',
@@ -39,13 +38,12 @@ const sections = {
     img: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1600&q=70',
   },
   right: {
-    num: '02',
     label: 'Desarrolladora',
     kicker: 'Emprendimientos para inversores',
     to: '/desarrollos',
     title: ['EMPRENDIMIENTOS', 'PARA', 'INVERSORES'],
     text: 'Desarrollos inmobiliarios en preventa y venta, pensados para crecer en el tiempo.',
-    cta: 'Ver desarrollos',
+    cta: 'Ver obras',
     img: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1600&q=70',
   },
 }
@@ -161,7 +159,7 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
           className="absolute inset-0 flex items-center px-5 sm:px-8"
         >
           <div className="mx-auto w-full max-w-7xl">
-            <p className="mb-8 text-[11px] uppercase tracking-[0.3em] text-white/60">
+            <p className="mb-8 text-[16px] uppercase tracking-[0.3em] text-white/60">
               {d.num} <span className="mx-2">/</span> {d.label}
             </p>
             <h2 className="font-display text-4xl font-extralight uppercase leading-[1.05] tracking-wide sm:text-6xl md:text-7xl">
