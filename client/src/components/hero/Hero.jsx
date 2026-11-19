@@ -140,9 +140,6 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
             to={section.to}
             className="group flex w-full flex-col items-center justify-center px-2 text-center"
           >
-            <span className="mb-4 text-[11px] font-medium tracking-[0.3em] text-white/90 [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
-              {section.num}
-            </span>
             <h2 className="font-display text-[3.6vw] font-normal uppercase tracking-[0.08em] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
               {section.label}
             </h2>
@@ -161,7 +158,7 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
         >
           <div className="mx-auto w-full max-w-7xl">
             <p className="mb-8 text-[16px] uppercase tracking-[0.3em] text-white/60">
-              {section.num} <span className="mx-2">/</span> {section.label}
+              {section.label}
             </p>
             <h2 className="font-display text-4xl font-extralight uppercase leading-[1.05] tracking-wide sm:text-6xl md:text-7xl">
               {section.title.map((titleLine) => (
