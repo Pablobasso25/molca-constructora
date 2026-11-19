@@ -11,20 +11,21 @@ import {
   useTransform,
 } from 'framer-motion'
 import { Mouse } from 'lucide-react'
-import { Wordmark, WORDMARK_BIG, WORDMARK_SIZE } from './Wordmark'
+import { Wordmark, wordmarkLoaderSize, wordmarkFinalSize } from './Wordmark'
 
-const useMap = (mv, input, output) => useTransform(mv, (v) => transform(v, input, output))
-const useEvents = (mv) => useTransform(mv, (o) => (o > 0.5 ? 'auto' : 'none'))
+const useMap = (motionValue, input, output) =>
+  useTransform(motionValue, (value) => transform(value, input, output))
+const useEvents = (motionValue) => useTransform(motionValue, (opacity) => (opacity > 0.5 ? 'auto' : 'none'))
 
-const EASE = [0.76, 0, 0.24, 1]
-const EASE_OUT = [0.22, 1, 0.36, 1]
+const easeInOutBezier = [0.76, 0, 0.24, 1]
+const easeOutBezier = [0.22, 1, 0.36, 1]
 
 let introPlayed = false
 
 const unlockScroll = () => {
   document.documentElement.style.overflow = ''
   document.documentElement.dataset.intro = 'done'
-  window.__lenis?.start()
+  window.lenisInstance?.start()
 }
 
 const sections = {
@@ -60,13 +61,13 @@ const intro =
   'Empresa especializada en proyectos comerciales y residenciales que combinan calidad constructiva, diseño funcional y una visión integral del entorno. Cuidamos cada detalle, desde la ingeniería inicial hasta la experiencia final.'
 
 const LoaderUI = () => {
-  const n = useMotionValue(0)
-  const label = useTransform(n, (v) => String(Math.round(v)).padStart(3, '0'))
-  const bar = useTransform(n, (v) => v / 100)
+  const counter = useMotionValue(0)
+  const label = useTransform(counter, (value) => String(Math.round(value)).padStart(3, '0'))
+  const bar = useTransform(counter, (value) => value / 100)
   useEffect(() => {
-    const c = animate(n, 100, { duration: 3, ease: [0.65, 0, 0.35, 1] })
-    return () => c.stop()
-  }, [n])
+    const controls = animate(counter, 100, { duration: 3, ease: [0.65, 0, 0.35, 1] })
+    return () => controls.stop()
+  }, [counter])
 
   return (
     <>
@@ -77,7 +78,7 @@ const LoaderUI = () => {
         className="absolute inset-0 h-full w-full object-cover opacity-[0.13] grayscale"
         initial={{ scale: 1.15, opacity: 0 }}
         animate={{ scale: 1, opacity: 0.13 }}
-        transition={{ duration: 3, ease: EASE_OUT }}
+        transition={{ duration: 3, ease: easeOutBezier }}
       />
      
     </>
@@ -100,21 +101,21 @@ const BlockReveal = ({ children, ready, delay, skip }) => (
         className="absolute inset-0 bg-white"
         initial={{ x: '-101%' }}
         animate={ready ? { x: ['-101%', '0%', '101%'] } : { x: '-101%' }}
-        transition={{ duration: 0.95, delay, times: [0, 0.5, 1], ease: EASE }}
+        transition={{ duration: 0.95, delay, times: [0, 0.5, 1], ease: easeInOutBezier }}
       />
     )}
   </span>
 )
 
 const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
-  const d = sections[side]
+  const section = sections[side]
   const isLeft = side === 'left'
   const detailY = useMap(detailOpacity, [0, 1], [40, 0])
   const splitEvents = useEvents(splitOpacity)
   const detailEvents = useEvents(detailOpacity)
 
-  const wrapX = useTransform(split, (v) => (isLeft ? `${v - 100}%` : `${v}%`))
-  const innerX = useTransform(split, (v) => (isLeft ? `${100 - v}%` : `${-v}%`))
+  const wrapX = useTransform(split, (position) => (isLeft ? `${position - 100}%` : `${position}%`))
+  const innerX = useTransform(split, (position) => (isLeft ? `${100 - position}%` : `${-position}%`))
 
   return (
     <motion.div
@@ -123,7 +124,7 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
     >
       <motion.div style={{ x: innerX }} className="absolute inset-0 will-change-transform">
         <img
-          src={d.img}
+          src={section.img}
           alt=""
           decoding="async"
           className="h-full w-full object-cover grayscale brightness-90"
@@ -136,17 +137,17 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
           className={`absolute inset-y-0 flex w-1/2 ${isLeft ? 'left-0' : 'right-0'}`}
         >
           <Link
-            to={d.to}
+            to={section.to}
             className="group flex w-full flex-col items-center justify-center px-2 text-center"
           >
             <span className="mb-4 text-[11px] font-medium tracking-[0.3em] text-white/90 [text-shadow:0_1px_12px_rgba(0,0,0,0.6)]">
-              {d.num}
+              {section.num}
             </span>
             <h2 className="font-display text-[3.6vw] font-normal uppercase tracking-[0.08em] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
-              {d.label}
+              {section.label}
             </h2>
             <p className="mt-4 hidden max-w-[16rem] text-[11px] font-medium uppercase tracking-[0.2em] text-white/90 [text-shadow:0_1px_12px_rgba(0,0,0,0.6)] sm:block">
-              {d.kicker}
+              {section.kicker}
             </p>
             <span className="mt-8 hidden border-b border-transparent pb-1 text-[11px] font-semibold uppercase tracking-widest transition-colors group-hover:border-white sm:inline-block">
               Entrar
@@ -160,21 +161,21 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
         >
           <div className="mx-auto w-full max-w-7xl">
             <p className="mb-8 text-[16px] uppercase tracking-[0.3em] text-white/60">
-              {d.num} <span className="mx-2">/</span> {d.label}
+              {section.num} <span className="mx-2">/</span> {section.label}
             </p>
             <h2 className="font-display text-4xl font-extralight uppercase leading-[1.05] tracking-wide sm:text-6xl md:text-7xl">
-              {d.title.map((l) => (
-                <span key={l} className="block">
-                  {l}
+              {section.title.map((titleLine) => (
+                <span key={titleLine} className="block">
+                  {titleLine}
                 </span>
               ))}
             </h2>
-            <p className="mt-8 max-w-sm text-sm leading-relaxed text-white/70">{d.text}</p>
+            <p className="mt-8 max-w-sm text-sm leading-relaxed text-white/70">{section.text}</p>
             <Link
-              to={d.to}
+              to={section.to}
               className="mt-8 inline-flex rounded-full border border-white/40 px-7 py-3 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-white hover:text-black"
             >
-              {d.cta}
+              {section.cta}
             </Link>
           </div>
         </motion.div>
@@ -185,8 +186,8 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
 
 export const Hero = () => {
   const reduce = useReducedMotion()
-  const ref = useRef(null)
-  const { scrollYProgress: p } = useScroll({ target: ref, offset: ['start start', 'end end'] })
+  const heroSectionRef = useRef(null)
+  const { scrollYProgress: scrollProgress } = useScroll({ target: heroSectionRef, offset: ['start start', 'end end'] })
 
   // loading → moving (el logo viaja a su lugar) → done
   const [stage, setStage] = useState(() => (introPlayed || reduce ? 'done' : 'loading'))
@@ -200,20 +201,20 @@ export const Hero = () => {
     window.scrollTo(0, 0)
     html.style.overflow = 'hidden'
     html.dataset.intro = 'playing'
-    window.__lenis?.stop()
+    window.lenisInstance?.stop()
 
 
     let alive = true
-    const minWait = new Promise((r) => setTimeout(r, 3200))
-    const loadImg = (src) =>
-      new Promise((r) => {
-        const im = new Image()
-        im.onload = im.onerror = r
-        im.src = src
+    const minWait = new Promise((resolve) => setTimeout(resolve, 3200))
+    const loadImage = (imageUrl) =>
+      new Promise((resolve) => {
+        const image = new Image()
+        image.onload = image.onerror = resolve
+        image.src = imageUrl
       })
     const images = Promise.race([
-      Promise.all([sections.left.img, sections.right.img].map(loadImg)),
-      new Promise((r) => setTimeout(r, 6000)),
+      Promise.all([sections.left.img, sections.right.img].map(loadImage)),
+      new Promise((resolve) => setTimeout(resolve, 6000)),
     ])
     Promise.all([minWait, images]).then(() => {
       if (alive) setStage('moving')
@@ -231,36 +232,36 @@ export const Hero = () => {
   }
   useEffect(() => {
     if (stage !== 'moving') return
-    const t = setTimeout(finish, 2600)
-    return () => clearTimeout(t)
+    const timeoutId = setTimeout(finish, 2600)
+    return () => clearTimeout(timeoutId)
   }, [stage])
 
 
-  const split = useMap(p, [0, 0.2, 0.4, 0.6, 0.8, 1], [50, 50, 100, 100, 0, 0])
-  const lineX = useTransform(split, (v) => `${v}vw`)
+  const split = useMap(scrollProgress, [0, 0.2, 0.4, 0.6, 0.8, 1], [50, 50, 100, 100, 0, 0])
+  const lineX = useTransform(split, (position) => `${position}vw`)
 
-  const uiOpacity = useMap(p, [0, 0.04, 0.11], [1, 1, 0])
-  const uiY = useMap(p, [0, 0.11], [0, -50])
+  const uiOpacity = useMap(scrollProgress, [0, 0.04, 0.11], [1, 1, 0])
+  const uiY = useMap(scrollProgress, [0, 0.11], [0, -50])
   const uiEvents = useEvents(uiOpacity)
 
-  const labels = useMap(p, [0.06, 0.12, 0.17, 0.22], [0, 1, 1, 0])
-  const leftDetail = useMap(p, [0.32, 0.4, 0.52, 0.6], [0, 1, 1, 0])
-  const rightDetail = useMap(p, [0.74, 0.82, 1], [0, 1, 1])
-  const leftOverlay = useMap(p, [0.2, 0.4], [0, 0.35])
-  const rightOverlay = useMap(p, [0.6, 0.82], [0, 0.35])
+  const labels = useMap(scrollProgress, [0.06, 0.12, 0.17, 0.22], [0, 1, 1, 0])
+  const leftDetail = useMap(scrollProgress, [0.32, 0.4, 0.52, 0.6], [0, 1, 1, 0])
+  const rightDetail = useMap(scrollProgress, [0.74, 0.82, 1], [0, 1, 1])
+  const leftOverlay = useMap(scrollProgress, [0.2, 0.4], [0, 0.35])
+  const rightOverlay = useMap(scrollProgress, [0.6, 0.82], [0, 0.35])
 
-  const barOpacity = useMap(p, [0.14, 0.24], [0, 1])
-  const fill1 = useMap(p, [0.2, 0.6], [0, 1])
-  const fill2 = useMap(p, [0.6, 1], [0, 1])
+  const barOpacity = useMap(scrollProgress, [0.14, 0.24], [0, 1])
+  const fill1 = useMap(scrollProgress, [0.2, 0.6], [0, 1])
+  const fill2 = useMap(scrollProgress, [0.6, 1], [0, 1])
 
   const rise = (delay) => ({
     initial: skip ? false : { opacity: 0, y: 24 },
     animate: ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 },
-    transition: { duration: 0.9, delay, ease: EASE_OUT },
+    transition: { duration: 0.9, delay, ease: easeOutBezier },
   })
 
   return (
-    <section ref={ref} className="relative h-[500vh] bg-molca-dark text-white">
+    <section ref={heroSectionRef} className="relative h-[500vh] bg-molca-dark text-white">
       <div className="sticky top-0 h-screen h-[100svh] w-full overflow-hidden">
         <Panel
           side="left"
@@ -289,7 +290,7 @@ export const Hero = () => {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="relative self-start">
               <div style={{ opacity: done ? 1 : 0 }}>
-                <Wordmark className={WORDMARK_SIZE} />
+                <Wordmark className={wordmarkFinalSize} />
               </div>
             </div>
 
@@ -321,7 +322,7 @@ export const Hero = () => {
             className="h-px w-full origin-left bg-white"
             initial={skip ? false : { scaleX: 0 }}
             animate={{ scaleX: ready ? 1 : 0 }}
-            transition={{ duration: 1.3, delay: 0.95, ease: EASE }}
+            transition={{ duration: 1.3, delay: 0.95, ease: easeInOutBezier }}
           />
 
           <div className="grid grid-cols-12 gap-x-6 gap-y-4 pt-4 md:pt-5">
@@ -351,13 +352,13 @@ export const Hero = () => {
           className="pointer-events-none absolute inset-x-5 bottom-6 z-20 grid grid-cols-2 gap-5 sm:inset-x-8"
         >
           {[
-            { l: 'Constructora', fill: fill1 },
-            { l: 'Desarrollos', fill: fill2 },
-          ].map((b) => (
-            <div key={b.l}>
-              <p className="mb-2 text-[10px] uppercase tracking-widest text-white/60">{b.l}</p>
+            { label: 'Constructora', fill: fill1 },
+            { label: 'Desarrollos', fill: fill2 },
+          ].map((progressBar) => (
+            <div key={progressBar.label}>
+              <p className="mb-2 text-[10px] uppercase tracking-widest text-white/60">{progressBar.label}</p>
               <div className="h-px w-full bg-white/20">
-                <motion.div style={{ scaleX: b.fill }} className="h-px origin-left bg-white" />
+                <motion.div style={{ scaleX: progressBar.fill }} className="h-px origin-left bg-white" />
               </div>
             </div>
           ))}
@@ -384,10 +385,10 @@ export const Hero = () => {
             >
               <motion.div
                 layout
-                transition={{ duration: 1.1, ease: EASE }}
+                transition={{ duration: 1.1, ease: easeInOutBezier }}
                 onLayoutAnimationComplete={() => stage === 'moving' && finish()}
               >
-                <Wordmark build className={stage === 'loading' ? WORDMARK_BIG : WORDMARK_SIZE} />
+                <Wordmark build className={stage === 'loading' ? wordmarkLoaderSize : wordmarkFinalSize} />
               </motion.div>
             </div>
           </>,

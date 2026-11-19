@@ -1,33 +1,33 @@
 import { motion } from 'framer-motion'
 
 const letters = 'MOLCA'.split('')
-const BANDS = 6
-const EASE = [0.76, 0, 0.24, 1]
+const bandCount = 6
+const easeInOutBezier = [0.76, 0, 0.24, 1]
 
-export const WORDMARK_BIG = 'text-[22vw] md:text-[19vw]'
-export const WORDMARK_SIZE = 'text-[16.5vw] md:text-[9.5vw]'
+export const wordmarkLoaderSize = 'text-[22vw] md:text-[19vw]'
+export const wordmarkFinalSize = 'text-[16.5vw] md:text-[9.5vw]'
 
 const BuiltLetter = ({ char, index }) => (
   <span className="relative inline-block">
     <span aria-hidden className="invisible">
       {char}
     </span>
-    {Array.from({ length: BANDS }).map((_, b) => {
-      const top = (b * 100) / BANDS - 0.4
-      const bottom = 100 - ((b + 1) * 100) / BANDS - 0.4
+    {[...Array(bandCount).keys()].map((bandIndex) => {
+      const top = (bandIndex * 100) / bandCount - 0.4
+      const bottom = 100 - ((bandIndex + 1) * 100) / bandCount - 0.4
       return (
         <motion.span
-          key={b}
+          key={bandIndex}
           aria-hidden
           className="absolute inset-0"
           style={{
-            clipPath: `inset(${b === 0 ? -15 : top}% -5% ${b === BANDS - 1 ? -15 : bottom}% -5%)`,
+            clipPath: `inset(${bandIndex === 0 ? -15 : top}% -5% ${bandIndex === bandCount - 1 ? -15 : bottom}% -5%)`,
           }}
-          initial={{ x: b % 2 ? '-80%' : '80%', opacity: 0 }}
+          initial={{ x: bandIndex % 2 ? '-80%' : '80%', opacity: 0 }}
           animate={{ x: '0%', opacity: 1 }}
           transition={{
-            x: { duration: 0.75, delay: 0.3 + index * 0.14 + b * 0.08, ease: EASE },
-            opacity: { duration: 0.2, delay: 0.3 + index * 0.14 + b * 0.08 },
+            x: { duration: 0.75, delay: 0.3 + index * 0.14 + bandIndex * 0.08, ease: easeInOutBezier },
+            opacity: { duration: 0.2, delay: 0.3 + index * 0.14 + bandIndex * 0.08 },
           }}
         >
           {char}
@@ -43,12 +43,12 @@ export const Wordmark = ({ build = false, className = '' }) => (
     role="img"
     className={`flex font-display font-extrabold uppercase leading-[0.85] tracking-[-0.04em] text-white ${className}`}
   >
-    {letters.map((l, i) =>
+    {letters.map((letter, letterIndex) =>
       build ? (
-        <BuiltLetter key={i} char={l} index={i} />
+        <BuiltLetter key={letterIndex} char={letter} index={letterIndex} />
       ) : (
-        <span key={i} aria-hidden className="inline-block">
-          {l}
+        <span key={letterIndex} aria-hidden className="inline-block">
+          {letter}
         </span>
       ),
     )}

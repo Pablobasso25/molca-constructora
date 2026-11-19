@@ -17,17 +17,17 @@ export const App = () => {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const lenis = new Lenis({ lerp: 0.09, smoothWheel: true })
-    window.__lenis = lenis 
-    let raf
-    const loop = (time) => {
+    window.lenisInstance = lenis 
+    let animationFrameId
+    const animationLoop = (time) => {
       lenis.raf(time)
-      raf = requestAnimationFrame(loop)
+      animationFrameId = requestAnimationFrame(animationLoop)
     }
-    raf = requestAnimationFrame(loop)
+    animationFrameId = requestAnimationFrame(animationLoop)
     return () => {
-      cancelAnimationFrame(raf)
+      cancelAnimationFrame(animationFrameId)
       lenis.destroy()
-      delete window.__lenis
+      delete window.lenisInstance
     }
   }, [])
 
