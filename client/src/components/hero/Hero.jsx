@@ -50,6 +50,13 @@ const sections = {
   },
 }
 
+// TODO: reemplazar por las cifras reales de MOLCA (valores de ejemplo).
+const trayectoria = [
+  { value: '+15', label: 'Años de trayectoria' },
+  { value: '+120', label: 'Obras ejecutadas' },
+  { value: '+50.000', label: 'm² construidos' },
+]
+
 const headline = ['CONSTRUIMOS', 'LO QUE VA', 'A QUEDAR']
 
 const LoaderUI = () => {
@@ -307,22 +314,24 @@ export const Hero = () => {
           />
 
           <div className="grid grid-cols-12 gap-x-6 gap-y-4 pt-4 md:pt-5">
-            <motion.div {...rise(1.4)} className="col-span-6 hidden items-start gap-5 md:flex">
-              <Link to="/proyecto/3" className="group block w-[42%] shrink-0 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=500&q=70"
-                  alt="Dúplex Ventus"
-                  className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-              </Link>
-              <div className="text-[13px] font-semibold leading-tight">
-                <p className="mb-3">Proyecto destacado</p>
-                <Link to="/proyecto/3" className="text-lg">
-                  Dúplex Ventus →
-                </Link>
-              </div>
+            <motion.div {...rise(1.4)} className="col-span-12">
+              <p className="mb-4 text-center text-[11px] font-semibold uppercase tracking-[0.3em] text-white/70 md:mb-5">
+                Nuestra trayectoria
+              </p>
+              <dl className="grid grid-cols-3 divide-x divide-white/25 text-center">
+                {trayectoria.map((stat) => (
+                  <div key={stat.label} className="px-2 md:px-6">
+                    <dt className="sr-only">{stat.label}</dt>
+                    <dd className="font-display text-3xl font-extralight leading-none tracking-wide sm:text-5xl md:text-6xl">
+                      {stat.value}
+                    </dd>
+                    <p aria-hidden className="mt-2 text-[10px] uppercase leading-tight tracking-widest text-white/70 md:text-[11px]">
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </dl>
             </motion.div>
-
           </div>
         </motion.div>
 
