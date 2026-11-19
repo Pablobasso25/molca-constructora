@@ -277,7 +277,7 @@ export const Hero = () => {
 
         <motion.div
           style={{ opacity: uiOpacity, y: uiY, pointerEvents: uiEvents }}
-          className="absolute inset-0 z-10 flex flex-col px-6 py-6"
+          className="absolute inset-0 z-10 flex flex-col px-6 pb-6 pt-24"
         >
           <div className="grid gap-6 md:grid-cols-2">
             <div className="relative self-start">
@@ -359,7 +359,7 @@ export const Hero = () => {
             </motion.div>
             <div
               className={`pointer-events-none fixed inset-0 z-[101] flex ${
-                stage === 'loading' ? 'items-center justify-center' : 'items-start justify-start px-6 py-6'
+                stage === 'loading' ? 'items-center justify-center' : 'items-start justify-start px-6 pb-6 pt-24'
               }`}
             >
               <motion.div
