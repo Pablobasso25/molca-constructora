@@ -16,8 +16,8 @@ const ProjectCard = ({ project }) => {
           src={project.imagen || 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80'}
           alt={project.titulo}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-          onError={(e) => {
-            e.target.src = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80'
+          onError={(event) => {
+            event.target.src = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=600&q=80'
           }}
         />
         {project.destacado && (

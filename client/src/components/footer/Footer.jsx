@@ -23,8 +23,8 @@ export const Footer = () => {
                 src="/img/logo.png"
                 alt="MOLCA"
                 className="h-8 w-auto"
-                onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/150x50?text=MOLCA'
+                onError={(event) => {
+                  event.target.src = 'https://via.placeholder.com/150x50?text=MOLCA'
                 }}
               />
               <span className="font-bold text-xl text-white tracking-tight">MOLCA</span>
@@ -53,9 +53,9 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-semibold mb-4">Redes Sociales</h4>
             <div className="flex gap-4">
-              {socials.map((s) => (
-                <a key={s.name} href={s.href} className="text-gray-400 hover:text-white transition-colors">
-                  {s.icon}
+              {socials.map((social) => (
+                <a key={social.name} href={social.href} className="text-gray-400 hover:text-white transition-colors">
+                  {social.icon}
                 </a>
               ))}
             </div>
