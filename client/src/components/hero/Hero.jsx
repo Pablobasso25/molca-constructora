@@ -57,7 +57,9 @@ const trayectoria = [
   { value: '+50.000', label: 'm² construidos' },
 ]
 
-const headline = ['CONSTRUIMOS', 'LO QUE VA', 'A QUEDAR']
+const headline = ['CONSTRUIMOS', 'CON VISIÓN', 'Y DESARROLLAMOS', 'FUTURO']
+const intro =
+  'Empresa especializada en proyectos comerciales y residenciales que combinan calidad constructiva, diseño funcional y una visión integral del entorno. Cuidamos cada detalle, desde la ingeniería inicial hasta la experiencia final.'
 
 const LoaderUI = () => {
   const n = useMotionValue(0)
@@ -293,15 +295,26 @@ export const Hero = () => {
               </div>
             </div>
 
-            <h1 className="font-display text-[8.2vw] font-normal uppercase leading-[1.04] tracking-[-0.02em] [text-shadow:0_2px_20px_rgba(0,0,0,0.35)] md:text-[4.4vw]">
-              {headline.map((l, i) => (
-                <div key={l}>
-                  <BlockReveal ready={ready} skip={skip} delay={0.75 + i * 0.14}>
-                    {l}
-                  </BlockReveal>
-                </div>
-              ))}
-            </h1>
+            <div>
+              <h1 className="font-display text-[7.4vw] font-normal uppercase leading-[1.04] tracking-[-0.02em] [text-shadow:0_2px_20px_rgba(0,0,0,0.35)] md:text-[3.9vw]">
+                {headline.map((headlineLine, lineIndex) => (
+                  <div key={headlineLine}>
+                    <BlockReveal ready={ready} skip={skip} delay={0.75 + lineIndex * 0.14}>
+                      {headlineLine}
+                    </BlockReveal>
+                  </div>
+                ))}
+              </h1>
+              <motion.div {...rise(1.3)} className="mt-6 max-w-xl md:mt-8">
+                <p className="text-[15px] leading-[1.7] text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.55)] md:text-[16px]">
+                  {intro}
+                </p>
+                <p className="mt-6 flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.3em] text-white/85 md:text-[14px]">
+                  <span aria-hidden className="h-px w-8 bg-white/60" />
+                  Salta, Argentina
+                </p>
+              </motion.div>
+            </div>
           </div>
 
           <div className="flex-1" />
