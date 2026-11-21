@@ -12,7 +12,6 @@ import {
 } from 'framer-motion'
 import { Mouse } from 'lucide-react'
 import { Wordmark, wordmarkLoaderSize, wordmarkFinalSize } from './Wordmark'
-
 const useMap = (motionValue, input, output) =>
   useTransform(motionValue, (value) => transform(value, input, output))
 const useEvents = (motionValue) => useTransform(motionValue, (opacity) => (opacity > 0.5 ? 'auto' : 'none'))
@@ -80,7 +79,7 @@ const LoaderUI = () => {
         animate={{ scale: 1, opacity: 0.13 }}
         transition={{ duration: 3, ease: easeOutBezier }}
       />
-     
+
     </>
   )
 }
@@ -140,7 +139,7 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
             to={section.to}
             className="group flex w-full flex-col items-center justify-center px-2 text-center"
           >
-            <h2 className="font-display text-[3.6vw] font-normal uppercase tracking-[0.08em] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
+            <h2 className="font-display text-[4.4vw] font-normal sm:text-[3.6vw] uppercase tracking-[0.08em] [text-shadow:0_2px_24px_rgba(0,0,0,0.55)]">
               {section.label}
             </h2>
             <p className="mt-4 hidden max-w-[16rem] text-[11px] font-medium uppercase tracking-[0.2em] text-white/90 [text-shadow:0_1px_12px_rgba(0,0,0,0.6)] sm:block">
@@ -157,20 +156,20 @@ const Panel = ({ side, split, overlay, splitOpacity, detailOpacity }) => {
           className="absolute inset-0 flex items-center px-5 sm:px-8"
         >
           <div className="mx-auto w-full max-w-7xl">
-            <p className="mb-8 text-[16px] uppercase tracking-[0.3em] text-white/60">
+            <p className="mb-5 text-[13px] uppercase tracking-[0.3em] text-white/60 sm:mb-8 sm:text-[16px]">
               {section.label}
             </p>
-            <h2 className="font-display text-4xl font-extralight uppercase leading-[1.05] tracking-wide sm:text-6xl md:text-7xl">
+            <h2 className="font-display text-[8.6vw] font-extralight uppercase leading-[1.05] tracking-wide sm:text-6xl md:text-7xl">
               {section.title.map((titleLine) => (
                 <span key={titleLine} className="block">
                   {titleLine}
                 </span>
               ))}
             </h2>
-            <p className="mt-8 max-w-sm text-sm leading-relaxed text-white/70">{section.text}</p>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-white/70 sm:mt-8">{section.text}</p>
             <Link
               to={section.to}
-              className="mt-8 inline-flex rounded-full border border-white/40 px-7 py-3 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-white hover:text-black"
+              className="mt-6 inline-flex sm:mt-8 rounded-full border border-white/40 px-7 py-3 text-xs font-semibold uppercase tracking-widest transition-colors hover:bg-white hover:text-black"
             >
               {section.cta}
             </Link>
@@ -234,22 +233,22 @@ export const Hero = () => {
   }, [stage])
 
 
-  const split = useMap(scrollProgress, [0, 0.2, 0.4, 0.6, 0.8, 1], [50, 50, 100, 100, 0, 0])
+  const split = useMap(scrollProgress, [0, 0.3, 0.46, 0.62, 0.78, 1], [50, 50, 100, 100, 0, 0])
   const lineX = useTransform(split, (position) => `${position}vw`)
 
-  const uiOpacity = useMap(scrollProgress, [0, 0.04, 0.11], [1, 1, 0])
-  const uiY = useMap(scrollProgress, [0, 0.11], [0, -50])
+  const uiOpacity = useMap(scrollProgress, [0, 0.03, 0.09], [1, 1, 0])
+  const uiY = useMap(scrollProgress, [0, 0.09], [0, -50])
   const uiEvents = useEvents(uiOpacity)
 
-  const labels = useMap(scrollProgress, [0.06, 0.12, 0.17, 0.22], [0, 1, 1, 0])
-  const leftDetail = useMap(scrollProgress, [0.32, 0.4, 0.52, 0.6], [0, 1, 1, 0])
-  const rightDetail = useMap(scrollProgress, [0.74, 0.82, 1], [0, 1, 1])
-  const leftOverlay = useMap(scrollProgress, [0.2, 0.4], [0, 0.35])
-  const rightOverlay = useMap(scrollProgress, [0.6, 0.82], [0, 0.35])
+  const labels = useMap(scrollProgress, [0.05, 0.1, 0.27, 0.32], [0, 1, 1, 0])
+  const leftDetail = useMap(scrollProgress, [0.4, 0.46, 0.57, 0.62], [0, 1, 1, 0])
+  const rightDetail = useMap(scrollProgress, [0.72, 0.8, 1], [0, 1, 1])
+  const leftOverlay = useMap(scrollProgress, [0.3, 0.46], [0, 0.35])
+  const rightOverlay = useMap(scrollProgress, [0.62, 0.8], [0, 0.35])
 
-  const barOpacity = useMap(scrollProgress, [0.14, 0.24], [0, 1])
-  const fill1 = useMap(scrollProgress, [0.2, 0.6], [0, 1])
-  const fill2 = useMap(scrollProgress, [0.6, 1], [0, 1])
+  const barOpacity = useMap(scrollProgress, [0.08, 0.16], [0, 1])
+  const fill1 = useMap(scrollProgress, [0.3, 0.62], [0, 1])
+  const fill2 = useMap(scrollProgress, [0.62, 1], [0, 1])
 
   const rise = (delay) => ({
     initial: skip ? false : { opacity: 0, y: 24 },
@@ -258,7 +257,7 @@ export const Hero = () => {
   })
 
   return (
-    <section ref={heroSectionRef} className="relative h-[500vh] bg-molca-dark text-white">
+    <section ref={heroSectionRef} className="relative h-[600vh] bg-molca-dark text-white">
       <div className="sticky top-0 h-screen h-[100svh] w-full overflow-hidden">
         <Panel
           side="left"
@@ -282,10 +281,10 @@ export const Hero = () => {
 
         <motion.div
           style={{ opacity: uiOpacity, y: uiY, pointerEvents: uiEvents }}
-          className="absolute inset-0 z-10 flex flex-col px-6 pb-6 pt-24"
+          className="absolute inset-0 z-10 flex flex-col px-5 pb-5 pt-20 sm:px-6 sm:pb-6 sm:pt-24"
         >
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="relative self-start">
+          <div className="grid gap-3 sm:gap-6 md:grid-cols-2">
+            <div className="relative flex items-start justify-between self-start md:block">
               <div style={{ opacity: done ? 1 : 0 }}>
                 <Wordmark className={wordmarkFinalSize} />
               </div>
@@ -301,11 +300,11 @@ export const Hero = () => {
                   </div>
                 ))}
               </h1>
-              <motion.div {...rise(1.3)} className="mt-6 max-w-xl md:mt-8">
-                <p className="text-[15px] leading-[1.7] text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.55)] md:text-[16px]">
+              <motion.div {...rise(1.3)} className="mt-4 max-w-xl md:mt-8">
+                <p className="text-[13px] leading-[1.55] text-white [text-shadow:0_1px_14px_rgba(0,0,0,0.55)] sm:text-[15px] sm:leading-[1.7] md:text-[16px]">
                   {intro}
                 </p>
-                <p className="mt-6 flex items-center gap-4 text-xs font-semibold uppercase tracking-[0.3em] text-white/85 md:text-[14px]">
+                <p className="mt-3 flex sm:mt-6 items-center gap-4 text-xs font-semibold uppercase tracking-[0.3em] text-white/85 md:text-[14px]">
                   <span aria-hidden className="h-px w-8 bg-white/60" />
                   Salta, Argentina
                 </p>
@@ -324,17 +323,17 @@ export const Hero = () => {
 
           <div className="grid grid-cols-12 gap-x-6 gap-y-4 pt-4 md:pt-5">
             <motion.div {...rise(1.4)} className="col-span-12">
-              <p className="mb-4 text-center text-[11px] font-semibold uppercase tracking-[0.3em] text-white/70 md:mb-5">
+              <p className="mb-3 text-center text-[10px] font-semibold uppercase tracking-[0.3em] text-white/70 sm:text-[11px] md:mb-5">
                 Nuestra trayectoria
               </p>
               <dl className="grid grid-cols-3 divide-x divide-white/25 text-center">
                 {trayectoria.map((stat) => (
-                  <div key={stat.label} className="px-2 md:px-6">
+                  <div key={stat.label} className="px-1 sm:px-2 md:px-6">
                     <dt className="sr-only">{stat.label}</dt>
-                    <dd className="font-display text-3xl font-extralight leading-none tracking-wide sm:text-5xl md:text-6xl">
+                    <dd className="font-display text-[6.8vw] font-extralight leading-none tracking-wide sm:text-5xl md:text-6xl">
                       {stat.value}
                     </dd>
-                    <p aria-hidden className="mt-2 text-[10px] uppercase leading-tight tracking-widest text-white/70 md:text-[11px]">
+                    <p aria-hidden className="mt-2 text-[9px] uppercase leading-tight tracking-wider sm:text-[10px] sm:tracking-widest text-white/70 md:text-[11px]">
                       {stat.label}
                     </p>
                   </div>
@@ -377,7 +376,9 @@ export const Hero = () => {
             </motion.div>
             <div
               className={`pointer-events-none fixed inset-0 z-[101] flex ${
-                stage === 'loading' ? 'items-center justify-center' : 'items-start justify-start px-6 pb-6 pt-24'
+                stage === 'loading'
+                  ? 'items-center justify-center'
+                  : 'items-start justify-start px-5 pb-5 pt-20 sm:px-6 sm:pb-6 sm:pt-24'
               }`}
             >
               <motion.div
