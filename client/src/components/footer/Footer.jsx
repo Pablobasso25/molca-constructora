@@ -61,9 +61,14 @@ export const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-700 pt-8">
+        <div className="border-t border-gray-700 pt-6">
           <p className="text-xs text-gray-500 text-center">
             © 2026 MOLCA Constructora y Desarrolladora. Todos los derechos reservados.
+          </p>
+        </div>
+        <div className="border-gray-700 pt-3">
+          <p className="text-sm text-gray-500 text-center">
+           Desarrollo web by <a href="https://www.instagram.com/codeit.tuc" className="text-gray-100 transition-colors" target="_blank" rel="noopener noreferrer">Code It</a>
           </p>
         </div>
       </div>
