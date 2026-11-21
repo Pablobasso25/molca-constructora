@@ -9,6 +9,7 @@ export default {
       colors: {
         molca: {
           dark: '#0d2f49',
+          blue: '#3b6db4',
           primary: '#1e3a8a',
           secondary: '#3b82f6',
           accent: '#f59e0b',
