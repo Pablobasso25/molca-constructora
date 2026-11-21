@@ -127,7 +127,7 @@ export const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
-            className="fixed inset-0 z-40 flex flex-col justify-center bg-[#0a0a0a] px-8 sm:px-16 lg:hidden"
+            className="fixed inset-0 z-40 flex flex-col justify-center bg-[#0d2f49] px-8 sm:px-16 lg:hidden"
           >
             <ul className="space-y-3">
               {links.map((link, index) => (
