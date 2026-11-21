@@ -1,3 +1,5 @@
+import { TeamScroll } from '../components/team/TeamScroll'
+
 export const Nosotros = () => {
   return (
     <section className="py-20 bg-molca-dark text-white">
@@ -54,6 +56,11 @@ export const Nosotros = () => {
               </ul>
             </div>
           </div>
+        </div>
+        <div className="mt-24 text-center">
+          <h2 className="text-4xl font-bold mb-4">Nuestro Equipo</h2>
+          <p className="text-gray-300 text-lg">Las personas que hacen posible cada obra.</p>
+          <TeamScroll />
         </div>
       </div>
     </section>
