@@ -1,5 +1,6 @@
 import { Hero } from '../components/hero/Hero'
 import { ProjectsGrid } from '../components/projects/ProjectsGrid'
+import { TerminadosSection } from '../components/projects/TerminadosSection'
 
 const mockProjects = [
   {
@@ -64,11 +65,23 @@ const mockProjects = [
   },
 ]
 
+// TODO: reemplazar por los proyectos terminados traídos de Cloudinary / API
+const mockTerminados = [
+  { id: 't1', titulo: 'Casas del Río', ciudad: 'Salta', anio: 2023, imagen: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80' },
+  { id: 't2', titulo: 'Proyecto Osadía', ciudad: 'Salta', anio: 2022, imagen: 'https://images.unsplash.com/photo-1502672260266-1c1ef1d39b68?auto=format&fit=crop&w=800&q=80' },
+  { id: 't3', titulo: 'Torre Central', ciudad: 'Salta', anio: 2021, imagen: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80' },
+  { id: 't4', titulo: 'Edificio Alvarado', ciudad: 'Salta', anio: 2021, imagen: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80' },
+  { id: 't5', titulo: 'Complejo Los Álamos', ciudad: 'Salta', anio: 2020, imagen: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' },
+  { id: 't6', titulo: 'Oficinas Belgrano', ciudad: 'Salta', anio: 2019, imagen: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80' },
+  { id: 't7', titulo: 'Barrio Las Lomas', ciudad: 'Salta', anio: 2019, imagen: 'https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=format&fit=crop&w=800&q=80' },
+]
+
 export const Home = () => {
   return (
     <div className="relative z-10">
       <Hero />
       <ProjectsGrid projects={mockProjects} />
+      <TerminadosSection projects={mockTerminados} />
     </div>
   )
 }
