@@ -29,15 +29,18 @@ const cardVariants = {
 
 const cardBaseWidth = 520
 const cardBaseHeight = 468
+const maxCardScale = 0.75
+const emptyTopSpace = 90
+const gapAboveCards = 50
 
-const splashBackground = 'linear-gradient(306deg, #1e3a8a, #fdfdfd00)'
+const splashBackground = 'linear-gradient(306deg, #3b6db4, #fdfdfd00)'
 
 const container = {
   display: 'flex',
   overflowX: 'auto',
   scrollSnapType: 'x mandatory',
-  marginTop: 40,
-  paddingBottom: 40,
+  marginTop: -50,
+  paddingBottom: 20,
   width: '100%',
 }
 
@@ -85,7 +88,7 @@ const useCardScale = () => {
   useEffect(() => {
     const updateCardScale = () => {
       const viewportWidth = document.documentElement.clientWidth
-      setCardScale(Math.min(1, (viewportWidth * 0.92) / cardBaseWidth))
+      setCardScale(Math.min(maxCardScale, (viewportWidth * 0.92) / cardBaseWidth))
     }
     updateCardScale()
     window.addEventListener('resize', updateCardScale)
@@ -139,7 +142,7 @@ export const TeamScroll = () => {
 
   return (
     <div style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)' }}>
-      <div ref={scrollRootRef} style={{ ...container, paddingInline: `calc(50vw - ${(cardBaseWidth * cardScale) / 2}px)` }} className="hide-scrollbar">
+      <div ref={scrollRootRef} style={{ ...container, marginTop: gapAboveCards - emptyTopSpace * cardScale, paddingInline: `calc(50vw - ${(cardBaseWidth * cardScale) / 2}px)` }} className="hide-scrollbar">
         {teamMembers.map((member) => (
           <TeamCard key={member.name} member={member} scrollRootRef={scrollRootRef} cardScale={cardScale} />
         ))}
