@@ -42,3 +42,11 @@ html.lenis body {
     @apply text-lg md:text-xl text-gray-600 mb-12 text-center max-w-2xl mx-auto;
   }
 }
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

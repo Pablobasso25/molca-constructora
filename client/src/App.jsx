@@ -12,6 +12,7 @@ import ProyectoDetalle from './pages/ProyectoDetalle'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminLogin from './pages/AdminLogin'
 import ProtectedRoute from './components/ui/ProtectedRoute'
+import ScrollToTop from './components/ui/ScrollToTop'
 
 export const App = () => {
   useEffect(() => {
@@ -33,6 +34,7 @@ export const App = () => {
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-grow">
