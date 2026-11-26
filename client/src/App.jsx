@@ -6,6 +6,7 @@ import Footer from './components/footer/Footer'
 import Home from './pages/Home'
 import Constructora from './pages/Constructora'
 import Desarrollos from './pages/Desarrollos'
+import Proyectos from './pages/Proyectos'
 import Nosotros from './pages/Nosotros'
 import Contacto from './pages/Contacto'
 import ProyectoDetalle from './pages/ProyectoDetalle'
@@ -41,6 +42,7 @@ export const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/constructora" element={<Constructora />} />
+            <Route path="/proyectos" element={<Proyectos />} />
             <Route path="/desarrollos" element={<Desarrollos />} />
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/contacto" element={<Contacto />} />
