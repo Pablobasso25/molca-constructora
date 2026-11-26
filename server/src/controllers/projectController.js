@@ -1,80 +1,117 @@
-const { pool } = require('../config/database')
-const { validationResult } = require('express-validator')
+const pool = require('../config/db')
+const asyncHandler = require('../utils/asyncHandler')
 
-exports.getAll = async (req, res) => {
-  try {
+const notFound = (res) => res.status(404).json({ error: 'Proyecto no encontrado' })
+const toFlag = (value) => ([true, 1, '1', 'true'].includes(value) ? 1 : 0)
+const optionalFlag = (value) => (value === undefined || value === null ? null : toFlag(value))
+// Campo no enviado: null, para que COALESCE conserve el valor actual.
+const keep = (value) => (value === undefined ? null : value)
+
+// onlyActive: las rutas públicas nunca exponen proyectos pausados.
+const list = (onlyActive) =>
+  asyncHandler(async (req, res) => {
     const { tipo, estado, activo, destacado } = req.query
-    let query = 'SELECT * FROM projects WHERE 1=1'
+    const where = []
     const params = []
+    const filter = (condition, value) => {
+      where.push(condition)
+      params.push(value)
+    }
 
-    if (tipo) { query += ' AND tipo = ?'; params.push(tipo) }
-    if (estado) { query += ' AND estado = ?'; params.push(estado) }
-    if (activo !== undefined) { query += ' AND activo = ?'; params.push(activo === 'true' ? 1 : 0) }
-    if (destacado !== undefined) { query += ' AND destacado = ?'; params.push(destacado === 'true' ? 1 : 0) }
+    if (typeof tipo === 'string') filter('tipo = ?', tipo)
+    if (typeof estado === 'string') filter('estado = ?', estado)
+    if (destacado !== undefined) filter('destacado = ?', toFlag(destacado))
+    if (onlyActive) filter('activo = ?', 1)
+    else if (activo !== undefined) filter('activo = ?', toFlag(activo))
 
-    query += ' ORDER BY creado_at DESC, id DESC'
-
-    const [rows] = await pool.query(query, params)
+    const clause = where.length ? `WHERE ${where.join(' AND ')}` : ''
+    const [rows] = await pool.execute(
+      `SELECT * FROM projects ${clause} ORDER BY created_at DESC, id DESC`,
+      params
+    )
     res.json(rows)
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
+  })
 
-exports.getById = async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM projects WHERE id = ?', [req.params.id])
-    if (rows.length === 0) return res.status(404).json({ error: 'Proyecto no encontrado' })
-    res.json(rows[0])
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
-
-exports.create = async (req, res) => {
-  try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
-
-    const { titulo, tipo, ciudad, estado, descripcion, imagen, imagenes, destacado, activo } = req.body
-    const [result] = await pool.query(
-      'INSERT INTO projects (titulo, tipo, ciudad, estado, descripcion, imagen, imagenes, destacado, activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      [titulo, tipo, ciudad, estado, descripcion, imagen, JSON.stringify(imagenes || []), destacado ? 1 : 0, activo !== undefined ? (activo ? 1 : 0) : 1]
+const detail = (onlyActive) =>
+  asyncHandler(async (req, res) => {
+    const [rows] = await pool.execute(
+      `SELECT * FROM projects WHERE id = ?${onlyActive ? ' AND activo = 1' : ''}`,
+      [req.params.id]
     )
-    res.status(201).json({ id: result.insertId, ...req.body })
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
+    if (rows.length === 0) return notFound(res)
+    return res.json(rows[0])
+  })
 
-exports.update = async (req, res) => {
-  try {
-    const { titulo, tipo, ciudad, estado, descripcion, imagen, imagenes, destacado, activo } = req.body
-    await pool.query(
-      'UPDATE projects SET titulo = ?, tipo = ?, ciudad = ?, estado = ?, descripcion = ?, imagen = ?, imagenes = ?, destacado = ?, activo = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-      [titulo, tipo, ciudad, estado, descripcion, imagen, JSON.stringify(imagenes || []), destacado ? 1 : 0, activo ? 1 : 0, req.params.id]
-    )
-    res.json({ message: 'Proyecto actualizado' })
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
+exports.getPublic = list(true)
+exports.getPublicById = detail(true)
+exports.getAll = list(false)
+exports.getById = detail(false)
 
-exports.toggleActivo = async (req, res) => {
-  try {
-    const { activo } = req.body
-    await pool.query('UPDATE projects SET activo = ? WHERE id = ?', [activo ? 1 : 0, req.params.id])
-    res.json({ message: `Proyecto ${activo ? 'activado' : 'pausado'}`, id: req.params.id, activo })
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
+exports.create = asyncHandler(async (req, res) => {
+  const { titulo, tipo, ciudad, estado, descripcion, imagen, imagenes, destacado, activo } = req.body
+  const [result] = await pool.execute(
+    `INSERT INTO projects
+      (titulo, tipo, ciudad, estado, descripcion, imagen, imagenes, destacado, activo)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      titulo,
+      tipo,
+      ciudad,
+      estado,
+      descripcion || null,
+      imagen || null,
+      JSON.stringify(imagenes || []),
+      toFlag(destacado),
+      activo === undefined ? 1 : toFlag(activo),
+    ]
+  )
+  res.status(201).json({ id: result.insertId, message: 'Proyecto creado' })
+})
 
-exports.delete = async (req, res) => {
-  try {
-    await pool.query('DELETE FROM projects WHERE id = ?', [req.params.id])
-    res.json({ message: 'Proyecto eliminado' })
-  } catch (error) {
-    res.status(500).json({ error: error.message })
-  }
-}
+exports.update = asyncHandler(async (req, res) => {
+  const { titulo, tipo, ciudad, estado, descripcion, imagen, imagenes, destacado, activo } = req.body
+  const [result] = await pool.execute(
+    `UPDATE projects SET
+      titulo = ?, tipo = ?, ciudad = ?, estado = ?,
+      descripcion = COALESCE(?, descripcion),
+      imagen = COALESCE(?, imagen),
+      imagenes = COALESCE(?, imagenes),
+      destacado = COALESCE(?, destacado),
+      activo = COALESCE(?, activo)
+     WHERE id = ?`,
+    [
+      titulo,
+      tipo,
+      ciudad,
+      estado,
+      keep(descripcion),
+      keep(imagen),
+      imagenes ? JSON.stringify(imagenes) : null,
+      optionalFlag(destacado),
+      optionalFlag(activo),
+      req.params.id,
+    ]
+  )
+  if (result.affectedRows === 0) return notFound(res)
+  return res.json({ message: 'Proyecto actualizado' })
+})
+
+exports.toggleActivo = asyncHandler(async (req, res) => {
+  const activo = toFlag(req.body.activo)
+  const [result] = await pool.execute('UPDATE projects SET activo = ? WHERE id = ?', [
+    activo,
+    req.params.id,
+  ])
+  if (result.affectedRows === 0) return notFound(res)
+  return res.json({
+    message: `Proyecto ${activo ? 'activado' : 'pausado'}`,
+    id: Number(req.params.id),
+    activo: Boolean(activo),
+  })
+})
+
+exports.remove = asyncHandler(async (req, res) => {
+  const [result] = await pool.execute('DELETE FROM projects WHERE id = ?', [req.params.id])
+  if (result.affectedRows === 0) return notFound(res)
+  return res.json({ message: 'Proyecto eliminado' })
+})
