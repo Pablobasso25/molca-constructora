@@ -26,7 +26,9 @@ molca-page/
 cd server
 cp .env.example .env
 # Editar .env con credenciales de MySQL y JWT
+mysql -u molca_api -p molca_api < schema.sql
 npm install
+npm run create-admin -- admin
 npm run dev
 ```
 
@@ -49,26 +51,30 @@ npm run dev
 | DELETE | /api/projects/:id | Eliminar proyecto (admin) |
 | POST | /api/leads | Registrar lead de contacto |
 | GET | /api/leads | Listar leads (admin) |
+| GET | /api/whatsapp/stats | Clics de WhatsApp (admin) |
 | POST | /api/whatsapp/click | Trackear clic de WhatsApp |
-| GET | /api/metrics | Métricas de tráfico |
+| GET | /api/metrics | Métricas de tráfico (admin) |
 | POST | /api/auth/login | Login admin |
 | GET | /api/auth/me | Perfil usuario |
 
 ## Despliegue VPS (DonWeb)
 
 1. Subir código al VPS (IP: 149.50.144.63)
-2. Configurar MySQL
-3. Configurar .env de producción
+2. Crear las tablas: `mysql -u molca_api -p molca_api < server/schema.sql`
+3. Configurar `server/.env` (`NODE_ENV=production`, `CORS_ORIGIN=https://molcaconstructora.com.ar`) e instalar con `npm ci --omit=dev`
 4. Instalar PM2: `npm install -g pm2`
 5. Iniciar backend: `pm2 start server/src/index.js --name molca-api`
 6. Build frontend: `cd client && npm run build`
 7. Configurar Apache como Reverse Proxy
 8. Configurar SSL
 
-## Credenciales por defecto (admin)
+## Usuario administrador
 
-- Usuario: `admin`
-- Clave: `admin123`
+No hay credenciales por defecto. Crear el usuario (o cambiar su clave) desde `server/`:
+
+```bash
+npm run create-admin -- admin
+```
 
 ## Licencia
 
