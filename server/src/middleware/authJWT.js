@@ -9,10 +9,9 @@ exports.authenticate = (req, res, next) => {
 
   const token = authHeader.split(' ')[1]
   try {
-    const decoded = jwt.verify(token, config.jwt.secret)
-    req.user = decoded
-    next()
+    req.user = jwt.verify(token, config.jwt.secret, { algorithms: ['HS256'] })
   } catch (error) {
     return res.status(401).json({ error: 'Token inválido o expirado' })
   }
+  return next()
 }
