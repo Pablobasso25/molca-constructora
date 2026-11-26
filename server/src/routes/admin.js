@@ -1,42 +1,17 @@
 const express = require('express')
-const router = express.Router()
+const controller = require('../controllers/projectController')
 const { authenticate } = require('../middleware/authJWT')
-const {
-  getAll,
-  getById,
-  create,
-  update,
-  toggleActivo,
-  delete: deleteProject,
-} = require('../controllers/projectController')
-const { body, param } = require('express-validator')
+const { validate, id, activo, project } = require('./validators')
+
+const router = express.Router()
 
 router.use(authenticate)
 
-router.get('/projects', getAll)
-router.get('/projects/:id', param('id').isInt(), getById)
-router.post(
-  '/projects',
-  [
-    body('titulo').notEmpty(),
-    body('tipo').notEmpty(),
-    body('ciudad').notEmpty(),
-    body('estado').isIn(['en obra', 'entregado', 'planeado', 'preventa']),
-  ],
-  create
-)
-router.put(
-  '/projects/:id',
-  [
-    param('id').isInt(),
-    body('titulo').notEmpty(),
-    body('tipo').notEmpty(),
-    body('ciudad').notEmpty(),
-    body('estado').isIn(['en obra', 'entregado', 'planeado', 'preventa']),
-  ],
-  update
-)
-router.patch('/projects/:id/activo', param('id').isInt(), toggleActivo)
-router.delete('/projects/:id', param('id').isInt(), deleteProject)
+router.get('/projects', controller.getAll)
+router.get('/projects/:id', id, validate, controller.getById)
+router.post('/projects', project, validate, controller.create)
+router.put('/projects/:id', id, project, validate, controller.update)
+router.patch('/projects/:id/activo', id, activo, validate, controller.toggleActivo)
+router.delete('/projects/:id', id, validate, controller.remove)
 
 module.exports = router

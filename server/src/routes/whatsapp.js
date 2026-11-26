@@ -1,16 +1,17 @@
 const express = require('express')
-const router = express.Router()
 const { trackClick, getStats } = require('../controllers/whatsappController')
-const { body } = require('express-validator')
+const { authenticate } = require('../middleware/authJWT')
+const { body, validate } = require('./validators')
+
+const router = express.Router()
 
 router.post(
   '/click',
-  [
-    body('type').optional().isIn(['general', 'specific']).withMessage('Tipo inválido'),
-  ],
+  body('type').optional().isIn(['general', 'specific']).withMessage('Tipo inválido'),
+  validate,
   trackClick
 )
 
-router.get('/stats', getStats)
+router.get('/stats', authenticate, getStats)
 
 module.exports = router

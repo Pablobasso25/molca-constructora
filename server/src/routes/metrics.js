@@ -1,7 +1,9 @@
 const express = require('express')
-const router = express.Router()
 const { getMetrics } = require('../controllers/metricController')
+const { authenticate } = require('../middleware/authJWT')
 
-router.get('/', getMetrics)
+const router = express.Router()
+
+router.get('/', authenticate, getMetrics)
 
 module.exports = router
